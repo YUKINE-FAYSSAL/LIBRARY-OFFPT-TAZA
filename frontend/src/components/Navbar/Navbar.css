@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 /* Navbar Container */
 .navbar {
   background: linear-gradient(135deg, #0056b3 0%, #003366 100%);
@@ -10,6 +12,7 @@
   z-index: 1000;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
   padding: 0 30px;
+  font-family: 'Poppins', sans-serif; /* New font family */
 }
 
 .navbar-container {
@@ -30,38 +33,27 @@
 }
 
 .logo-backdrop {
-  background: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  border-radius: 50%;
-  box-shadow: 
-    0 0 0 4px rgba(255, 215, 0, 0.3),
-    0 4px 15px rgba(0, 0, 0, 0.2);
+  background: transparent; /* Remove background */
+  padding: 0; /* Remove padding */
+  border-radius: 0; /* Remove circle shape */
+  box-shadow: none; /* Remove shadow */
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s ease;
-}
-
-.logo-backdrop:hover {
-  transform: scale(1.05);
-  box-shadow: 
-    0 0 0 4px rgba(255, 215, 0, 0.5),
-    0 6px 25px rgba(0, 0, 0, 0.3);
 }
 
 .logo-image {
-  height: 50px;
-  width: 50px;
+  height: 300px; /* Increased size */
+  width: 150; /* Maintain aspect ratio */
   object-fit: contain;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
   transition: all 0.3s ease;
 }
 
-/* App Name Styling */
-.app-name-container {
-  display: flex;
-  flex-direction: column;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+/* Remove hover effects on backdrop since we removed it */
+.logo-backdrop:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .app-name-main {
@@ -86,6 +78,7 @@
   margin: 0;
   padding: 0;
   gap: 30px;
+  transition: transform 0.3s ease-in-out;
 }
 
 .nav-item {
@@ -241,19 +234,6 @@
   color: #7f8c8d;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .notification-dropdown {
-    width: 280px;
-    right: -20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .notification-dropdown {
-    width: 250px;
-  }
-}
 /* User Dropdown */
 .user-dropdown-container {
   position: relative;
@@ -287,6 +267,7 @@
 }
 
 .dropdown-menu {
+  font-family: 'Poppins', sans-serif;
   position: absolute;
   right: 0;
   top: 50px;
@@ -340,7 +321,7 @@
 }
 
 .dropdown-item.logout {
-  color: #e74c3c;
+  color: #000 !important; /* Black text for logout */
   border-top: 1px solid #eee;
 }
 
@@ -448,7 +429,6 @@
     gap: 25px;
     box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-150%);
-    transition: transform 0.3s ease;
     z-index: 1000;
   }
   
@@ -464,19 +444,24 @@
   .nav-link {
     padding: 15px;
     width: 100%;
+    font-size: 1.2rem;
   }
   
   .logo-backdrop {
-    padding: 12px;
+    display: none;
   }
   
   .logo-image {
-    height: 45px;
-    width: 45px;
+    height: 60px; /* Slightly smaller on mobile */
   }
   
   .app-name-main {
     font-size: 1.5rem;
+  }
+  
+  .notification-dropdown {
+    width: 280px;
+    right: -20px;
   }
 }
 
@@ -485,17 +470,16 @@
     font-size: 1.3rem;
   }
   
-  .logo-backdrop {
-    padding: 10px;
-  }
-  
   .logo-image {
-    height: 40px;
-    width: 40px;
+    height: 50px; /* Even smaller on very small screens */
   }
   
   .nav-controls {
     gap: 10px;
+  }
+  
+  .notification-dropdown {
+    width: 250px;
   }
 }
 
@@ -503,4 +487,123 @@
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
+}
+/* Add this to your existing CSS */
+.navbar-brand {
+  text-decoration: none;
+}
+
+.notification-item {
+  cursor: pointer;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.notification-item:hover {
+  background-color: #e9ecef;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  width: 350px;
+  max-height: 500px;
+  overflow-y: auto;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  transform-origin: top right;
+  animation: fadeIn 0.2s ease;
+  z-index: 1001;
+  display: none;
+}
+
+.notification-container:hover .notification-dropdown,
+.notification-dropdown.active {
+  display: block;
+}
+/* Improve mobile menu */
+@media (max-width: 768px) {
+  .navbar {
+    height: 80px;
+    padding: 0 20px;
+  }
+  
+  .logo-image {
+    height: 50px !important;
+    width: auto !important;
+  }
+  
+  .app-name-main {
+    font-size: 1.3rem;
+    margin-left: 10px;
+  }
+  
+  .nav-links {
+    top: 80px;
+    background: #002244; /* Darker background for better contrast */
+    padding: 15px 0;
+  }
+  
+  .nav-link {
+    font-size: 1.1rem;
+    padding: 12px 15px;
+  }
+  
+  .notification-dropdown {
+    width: 280px;
+    right: -50px; /* Better positioning on mobile */
+  }
+}
+/* Add smooth transitions */
+.nav-link, .auth-btn, .notification-btn, .user-avatar {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Improve logo appearance */
+.logo-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-image {
+  height: 300px;
+  width: 150;
+  transition: transform 0.3s ease;
+}
+
+.logo-image:hover {
+  transform: scale(1.05);
+}
+
+/* Better notification dropdown */
+.notification-dropdown {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.notification-item {
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.notification-item:hover {
+  background-color: #f5f5f5;
+}
+
+/* Better user dropdown */
+.user-dropdown-container {
+  margin-left: 15px;
+}
+
+.user-avatar {
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover {
+  border-color: #ffd700;
 }

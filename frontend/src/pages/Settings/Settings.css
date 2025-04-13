@@ -243,3 +243,59 @@
       padding: 20px;
     }
   }
+  /* Default light mode styles */
+body {
+  background-color: #fff;
+  color: #333;
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+  background-color: #121212;
+  color: white;
+}
+
+body.dark-mode .navbar {
+  background-color: #333;
+}
+
+body.dark-mode .footer {
+  background-color: #333;
+}
+
+/* Example: Card Styles */
+body.dark-mode .card {
+  background-color: #2d2d2d;
+  color: white;
+}
+/* Example CSS for Dark Mode */
+body.dark-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+body.dark-mode .navbar {
+  background-color: #333;
+}
+
+body.dark-mode .footer {
+  background-color: #333;
+}
+
+body.dark-mode .settings-page {
+  background-color: #1e1e1e;
+  color: #ffffff;
+}
+
+body.dark-mode .settings-nav-item.active {
+  color: #FFD700; /* Active link color for dark mode */
+}
+
+/* Toggle switch for dark mode */
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #4CAF50;
+}
+
+.toggle-slider {
+  transition: 0.4s;
+}

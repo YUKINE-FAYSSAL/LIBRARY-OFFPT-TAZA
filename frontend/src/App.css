@@ -23,3 +23,37 @@
     padding: 10px;
   }
 }
+/* src/index.css */
+:root {
+  /* Light theme colors */
+  --bg-color: #ffffff;
+  --text-color: #333333;
+  --primary-color: #3498db;
+  --secondary-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --navbar-bg: #ffffff;
+  --footer-bg: #f8f9fa;
+  --settings-nav-bg: #ffffff;
+  --settings-content-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  /* Dark theme colors */
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --primary-color: #1e88e5;
+  --secondary-color: #1e1e1e;
+  --card-bg: #2d2d2d;
+  --border-color: #444444;
+  --navbar-bg: #1e1e1e;
+  --footer-bg: #1e1e1e;
+  --settings-nav-bg: #2d2d2d;
+  --settings-content-bg: #2d2d2d;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

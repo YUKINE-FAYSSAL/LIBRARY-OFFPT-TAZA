@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './BookCatalogue.css';
+import { AuthContext } from '../../context/AuthContext';
 
-const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
+const BookCatalogue = ({ searchTerm = '', filters = {}, isFavoritePage = false }) => {
+  const { user } = useContext(AuthContext);
   const [livres, setLivres] = useState([
     { 
       id: 1, 
@@ -10,7 +12,8 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
       disponible: true, 
       cote: 'DEV001',
       categorie: 'informatique',
-      datePublication: '2022-03-15'
+      datePublication: '2022-03-15',
+      isFavorite: false
     },
     { 
       id: 2, 
@@ -19,7 +22,8 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
       disponible: false, 
       cote: 'DEV002',
       categorie: 'informatique',
-      datePublication: '2021-11-20'
+      datePublication: '2021-11-20',
+      isFavorite: true
     },
     { 
       id: 3, 
@@ -28,7 +32,8 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
       disponible: true, 
       cote: 'RES101',
       categorie: 'reseau',
-      datePublication: '2023-01-10'
+      datePublication: '2023-01-10',
+      isFavorite: false
     },
     { 
       id: 4, 
@@ -37,7 +42,8 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
       disponible: true, 
       cote: 'GES201',
       categorie: 'gestion',
-      datePublication: '2022-09-05'
+      datePublication: '2022-09-05',
+      isFavorite: false
     },
     { 
       id: 5, 
@@ -46,7 +52,8 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
       disponible: true, 
       cote: 'DEV003',
       categorie: 'informatique',
-      datePublication: '2023-02-28'
+      datePublication: '2023-02-28',
+      isFavorite: false
     },
     { 
       id: 6, 
@@ -55,22 +62,34 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
       disponible: false, 
       cote: 'COM101',
       categorie: 'communication',
-      datePublication: '2021-05-12'
+      datePublication: '2021-05-12',
+      isFavorite: false
     }
   ]);
 
+  const [favorites, setFavorites] = useState(
+    livres.filter(livre => livre.isFavorite)
+  );
+
+  const toggleFavorite = (id) => {
+    const updatedLivres = livres.map(livre => 
+      livre.id === id ? { ...livre, isFavorite: !livre.isFavorite } : livre
+    );
+    setLivres(updatedLivres);
+    setFavorites(updatedLivres.filter(livre => livre.isFavorite));
+  };
+
   const filtrerLivres = () => {
-    return livres.filter(livre => {
-      // Filter by search term (title or author)
+    let filtered = isFavoritePage ? livres.filter(livre => livre.isFavorite) : livres;
+    
+    return filtered.filter(livre => {
       const matchesSearch = 
         livre.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         livre.auteur.toLowerCase().includes(searchTerm.toLowerCase());
       
-      // Filter by category
       const matchesCategory = 
         !filters.category || livre.categorie === filters.category;
       
-      // Filter by availability
       const matchesAvailability = 
         filters.availability === 'all' ||
         (filters.availability === 'available' && livre.disponible) ||
@@ -102,7 +121,6 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
   const livresFiltres = trierLivres(filtrerLivres());
 
   const reserverLivre = (id) => {
-    // API call to reserve book
     alert(`Livre ${id} réservé avec succès!`);
   };
 
@@ -112,7 +130,18 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
         {livresFiltres.length > 0 ? (
           livresFiltres.map(livre => (
             <div key={livre.id} className="livre-card">
-              <h3>{livre.titre}</h3>
+              <div className="livre-header">
+                <h3>{livre.titre}</h3>
+                {user && (
+                  <button 
+                    className={`favorite-btn ${livre.isFavorite ? 'active' : ''}`}
+                    onClick={() => toggleFavorite(livre.id)}
+                    aria-label={livre.isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                  >
+                    <i className={`fas ${livre.isFavorite ? 'fa-heart' : 'fa-heart-o'}`}></i>
+                  </button>
+                )}
+              </div>
               <p>Auteur: {livre.auteur}</p>
               <div className="livre-meta">
                 <span className="cote">{livre.cote}</span>
@@ -131,7 +160,9 @@ const BookCatalogue = ({ searchTerm = '', filters = {} }) => {
           ))
         ) : (
           <div className="no-results">
-            Aucun livre trouvé avec les critères de recherche sélectionnés
+            {isFavoritePage 
+              ? 'Vous n\'avez aucun livre dans vos favoris' 
+              : 'Aucun livre trouvé avec les critères de recherche sélectionnés'}
           </div>
         )}
       </div>

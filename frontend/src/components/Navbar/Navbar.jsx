@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
-import logo from '../../asset/logo/logo.png';
+import logo from '../../asset/logo/log.png';  // Updated logo path
 import './Navbar.css';
 
 const Navbar = () => {
@@ -10,8 +10,9 @@ const Navbar = () => {
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [unreadCount, setUnreadCount] = useState(3);
   const navigate = useNavigate();
+  const menuRef = useRef(null);
+  const notificationRef = useRef(null);
 
-  // Sample notifications data
   const notifications = [
     { id: 1, text: "Votre livre 'React Avancé' est dû demain", read: false },
     { id: 2, text: "Nouveaux livres disponibles", read: false },
@@ -35,15 +36,34 @@ const Navbar = () => {
     setUnreadCount(0);
   };
 
+  const handleNotificationClick = (id) => {
+    console.log('Notification clicked:', id);
+    setIsNotificationOpen(false);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        closeMenu();
+      }
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsNotificationOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <nav className="navbar">
+    <nav className="navbar" ref={menuRef}>
       <div className="navbar-container">
-        {/* Mobile Menu Button */}
         <button className="menu-toggle" onClick={toggleMenu} aria-label="Toggle menu">
           <i className={`fas ${isMenuOpen ? 'fa-times' : 'fa-bars'}`}></i>
         </button>
 
-        {/* Logo and App Name */}
         <Link to="/" className="navbar-brand" onClick={closeMenu}>
           <div className="logo-wrapper">
             <div className="logo-backdrop">
@@ -57,30 +77,25 @@ const Navbar = () => {
                 }}
               />
             </div>
-            <div className="app-name-container">
-              <span className="app-name-main">BOOKBOX</span>
-              <span className="app-name-sub">OFPPT Taza</span>
-            </div>
           </div>
         </Link>
 
-        {/* Navigation Links */}
         <ul className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
           <NavItem to="/" text="Accueil" onClick={closeMenu} />
           <NavItem to="/catalogue" text="Catalogue" onClick={closeMenu} />
           {user && (
             <>
-              <NavItem to="/emprunts" text="Mes Emprunts" onClick={closeMenu} />
               <NavItem to="/reservation" text="Mes Réservations" onClick={closeMenu} />
+              <NavItem to="/propose" text="Propose" onClick={closeMenu} />
+              <NavItem to="/besoins" text="Besoins" onClick={closeMenu} />
             </>
           )}
         </ul>
 
-        {/* Right Side Controls */}
         <div className="nav-controls">
           {user ? (
             <>
-              <div className="notification-container">
+              <div className="notification-container" ref={notificationRef}>
                 <button 
                   className="notification-btn"
                   onClick={toggleNotifications}
@@ -91,31 +106,30 @@ const Navbar = () => {
                   )}
                 </button>
 
-                {isNotificationOpen && (
-                  <div className="notification-dropdown">
-                    <div className="notification-header">
-                      <h3>Notifications</h3>
-                      <button 
-                        className="mark-all-read"
-                        onClick={markAllAsRead}
-                      >
-                        Tout marquer comme lu
-                      </button>
-                    </div>
-                    
-                    <div className="notification-list">
-                      {notifications.map(notification => (
-                        <div 
-                          key={notification.id} 
-                          className={`notification-item ${!notification.read ? 'unread' : ''}`}
-                        >
-                          <p>{notification.text}</p>
-                          <span className="notification-time">Il y a 2h</span>
-                        </div>
-                      ))}
-                    </div>
+                <div className={`notification-dropdown ${isNotificationOpen ? 'active' : ''}`}>
+                  <div className="notification-header">
+                    <h3>Notifications</h3>
+                    <button 
+                      className="mark-all-read"
+                      onClick={markAllAsRead}
+                    >
+                      Tout marquer comme lu
+                    </button>
                   </div>
-                )}
+                  
+                  <div className="notification-list">
+                    {notifications.map(notification => (
+                      <div 
+                        key={notification.id} 
+                        className={`notification-item ${!notification.read ? 'unread' : ''}`}
+                        onClick={() => handleNotificationClick(notification.id)}
+                      >
+                        <p>{notification.text}</p>
+                        <span className="notification-time">Il y a 2h</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
               <UserDropdown onLogout={handleLogout} user={user} />
             </>
@@ -128,7 +142,6 @@ const Navbar = () => {
   );
 };
 
-// Reusable Nav Item Component
 const NavItem = ({ to, text, onClick }) => (
   <li className="nav-item">
     <Link to={to} className="nav-link" onClick={onClick}>
@@ -137,10 +150,9 @@ const NavItem = ({ to, text, onClick }) => (
   </li>
 );
 
-// User Dropdown Component
 const UserDropdown = ({ onLogout, user }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const userGender = user.gender || 'man'; // Default to man if gender not specified
+  const userGender = user.gender || 'man';
   const avatarImage = userGender === 'woman' 
     ? require('../../asset/icons/woman.png') 
     : require('../../asset/icons/man.png');
@@ -160,9 +172,12 @@ const UserDropdown = ({ onLogout, user }) => {
           <Link to="/profile" className="dropdown-item" onClick={() => setIsOpen(false)}>
             <i className="fas fa-user"></i> Mon Profil
           </Link>
+          <Link to="/favorite" className="dropdown-item" onClick={() => setIsOpen(false)}>
+            <i className="fas fa-heart"></i> Mes Favoris
+          </Link>
           <Link to="/parametres" className="dropdown-item" onClick={() => setIsOpen(false)}>
-  <i className="fas fa-cog"></i> Paramètres
-</Link>
+            <i className="fas fa-cog"></i> Paramètres
+          </Link>
           <button className="dropdown-item logout" onClick={onLogout}>
             <i className="fas fa-sign-out-alt"></i> Déconnexion
           </button>
@@ -172,16 +187,11 @@ const UserDropdown = ({ onLogout, user }) => {
   );
 };
 
-// Auth Buttons Component
 const AuthButtons = () => (
   <div className="auth-buttons">
     <Link to="/connexion" className="auth-btn login">
       <i className="fas fa-sign-in-alt"></i>
       <span>Connexion</span>
-    </Link>
-    <Link to="/inscription" className="auth-btn signup">
-      <i className="fas fa-user-plus"></i>
-      <span>Inscription</span>
     </Link>
   </div>
 );

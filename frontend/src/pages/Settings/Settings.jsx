@@ -1,22 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ThemeContext } from '../../context/ThemeContext';
 import './Settings.css';
 
 const Settings = () => {
+  const { darkMode, toggleDarkMode } = useContext(ThemeContext);
   const location = useLocation();
   const [activeTab, setActiveTab] = useState(location.hash || '#compte');
   const [formData, setFormData] = useState({
+    // Account Tab
     nom: 'Dupont',
     prenom: 'Jean',
     email: 'jean.dupont@ofppt.taza',
     telephone: '0612345678',
-    langue: 'fr',
-    notifications: true,
-    darkMode: false,
+    
+    // Security Tab
     oldPassword: '',
     newPassword: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    
+    // Notifications Tab
+    notificationsEmail: true,
+    notificationsSMS: false,
+    notificationsApp: true,
+    
+    // Appearance Tab
+    langue: localStorage.getItem('langue') || 'fr',
+    darkMode: false, // Disabled by default
   });
+
+  // Sync with context when dark mode changes
+  useEffect(() => {
+    setFormData(prev => ({
+      ...prev,
+      darkMode: darkMode
+    }));
+  }, [darkMode]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -24,11 +43,18 @@ const Settings = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+
+    if (name === 'darkMode') {
+      toggleDarkMode(); // Update context
+    }
+
+    if (name === 'langue') {
+      localStorage.setItem('langue', value);
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission
     alert('Paramètres enregistrés avec succès!');
   };
 
@@ -37,7 +63,7 @@ const Settings = () => {
       <h1>Paramètres</h1>
       
       <div className="settings-container">
-        {/* Settings Navigation */}
+        {/* Navigation */}
         <div className="settings-nav">
           <Link 
             to="#compte" 
@@ -73,12 +99,13 @@ const Settings = () => {
           </Link>
         </div>
         
-        {/* Settings Content */}
+        {/* Content */}
         <div className="settings-content">
+          {/* Account Tab */}
           {activeTab === '#compte' && (
             <form onSubmit={handleSubmit}>
               <div className="settings-section">
-                <h2>Informations du Compte</h2>
+                <h2>Informations du compte</h2>
                 
                 <div className="form-row">
                   <div className="settings-form-group">
@@ -90,7 +117,6 @@ const Settings = () => {
                       onChange={handleChange}
                     />
                   </div>
-                  
                   <div className="settings-form-group">
                     <label>Prénom</label>
                     <input
@@ -104,12 +130,12 @@ const Settings = () => {
                 
                 <div className="settings-form-group">
                   <label>Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                  />
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                    />
                 </div>
                 
                 <div className="settings-form-group">
@@ -129,10 +155,11 @@ const Settings = () => {
             </form>
           )}
           
+          {/* Security Tab */}
           {activeTab === '#securite' && (
             <form onSubmit={handleSubmit}>
               <div className="settings-section">
-                <h2>Changer le Mot de Passe</h2>
+                <h2>Sécurité du compte</h2>
                 
                 <div className="settings-form-group">
                   <label>Ancien mot de passe</label>
@@ -141,6 +168,7 @@ const Settings = () => {
                     name="oldPassword"
                     value={formData.oldPassword}
                     onChange={handleChange}
+                    placeholder="Entrez votre mot de passe actuel"
                   />
                 </div>
                 
@@ -151,16 +179,18 @@ const Settings = () => {
                     name="newPassword"
                     value={formData.newPassword}
                     onChange={handleChange}
+                    placeholder="Entrez votre nouveau mot de passe"
                   />
                 </div>
                 
                 <div className="settings-form-group">
-                  <label>Confirmer le nouveau mot de passe</label>
+                  <label>Confirmer le mot de passe</label>
                   <input
                     type="password"
                     name="confirmPassword"
                     value={formData.confirmPassword}
                     onChange={handleChange}
+                    placeholder="Confirmez votre nouveau mot de passe"
                   />
                 </div>
               </div>
@@ -171,48 +201,49 @@ const Settings = () => {
             </form>
           )}
           
+          {/* Notifications Tab */}
           {activeTab === '#notifications' && (
             <form onSubmit={handleSubmit}>
               <div className="settings-section">
-                <h2>Préférences de Notification</h2>
+                <h2>Notifications</h2>
                 
                 <div className="toggle-label">
                   <label className="toggle-switch">
                     <input
                       type="checkbox"
-                      name="notifications"
-                      checked={formData.notifications}
+                      name="notificationsEmail"
+                      checked={formData.notificationsEmail}
                       onChange={handleChange}
                     />
                     <span className="toggle-slider"></span>
                   </label>
-                  <span>Activer les notifications</span>
-                </div>
-                
-                <h3>Types de Notifications</h3>
-                
-                <div className="toggle-label">
-                  <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
-                    <span className="toggle-slider"></span>
-                  </label>
-                  <span>Rappels d'emprunts</span>
+                  <span>Notifications par email</span>
                 </div>
                 
                 <div className="toggle-label">
                   <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
+                    <input
+                      type="checkbox"
+                      name="notificationsSMS"
+                      checked={formData.notificationsSMS}
+                      onChange={handleChange}
+                    />
                     <span className="toggle-slider"></span>
                   </label>
-                  <span>Nouveaux livres disponibles</span>
+                  <span>Notifications par SMS</span>
                 </div>
                 
                 <div className="toggle-label">
                   <label className="toggle-switch">
-                    <input type="checkbox" defaultChecked />
+                    <input
+                      type="checkbox"
+                      name="notificationsApp"
+                      checked={formData.notificationsApp}
+                      onChange={handleChange}
+                    />
                     <span className="toggle-slider"></span>
                   </label>
-                  <span>Réservations prêtes</span>
+                  <span>Notifications dans l'application</span>
                 </div>
               </div>
               
@@ -222,10 +253,11 @@ const Settings = () => {
             </form>
           )}
           
+          {/* Appearance Tab */}
           {activeTab === '#apparence' && (
             <form onSubmit={handleSubmit}>
               <div className="settings-section">
-                <h2>Thème</h2>
+                <h2>Apparence</h2>
                 
                 <div className="toggle-label">
                   <label className="toggle-switch">
