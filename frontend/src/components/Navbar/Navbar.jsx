@@ -86,7 +86,7 @@ const Navbar = () => {
           {user && (
             <>
               <NavItem to="/reservation" text="Mes Réservations" onClick={closeMenu} />
-              <NavItem to="/propose" text="Propose" onClick={closeMenu} />
+              <NavItem to="/propose" text="À propos" onClick={closeMenu} />
               <NavItem to="/besoins" text="Besoins" onClick={closeMenu} />
             </>
           )}
