@@ -4,38 +4,52 @@ import { AuthContext } from '../../context/AuthContext';
 import { motion } from 'framer-motion';
 import './Accueil.css';
 
-// Modern library images
+// Images
 import mainHero from '../../asset/images/modern-library-interior.jpg';
-import bookCollection from '../../asset/images/book-collection-display.jpg';
+import reservationImg from '../../asset/images/book-reservation.jpg';
+import programBooksImg from '../../asset/images/program-books.jpg';
 import digitalSection from '../../asset/images/digital-reading-area.jpg';
 import studyZone from '../../asset/images/study-zone.jpg';
 import featuredBook1 from '../../asset/images/featured-book-1.jpg';
 import featuredBook2 from '../../asset/images/featured-book-2.jpg';
+import ofpptBuilding from '../../asset/images/ofppt-taza-building.jpg';
 
 const Accueil = () => {
   const { user, isLoading } = useContext(AuthContext);
 
-  const features = [
+  // Services data
+  const services = [
     {
-      icon: 'fas fa-books',
-      title: 'Collection Physique',
-      description: '15,000+ livres couvrant tous les domaines académiques',
-      image: bookCollection,
-      color: '#4361ee'
+      icon: 'fas fa-calendar-check',
+      title: 'Réservation de Livres',
+      description: 'Réservez vos livres en ligne et récupérez-les à la bibliothèque',
+      image: reservationImg,
+      color: '#4361ee',
+      link: '/reservation'
+    },
+    {
+      icon: 'fas fa-book-open',
+      title: 'Livres par Spécialité',
+      description: 'Collections dédiées à chaque filière OFPPT (TSDI, TCE, etc.)',
+      image: programBooksImg,
+      color: '#3a0ca3',
+      link: '/program-books'
     },
     {
       icon: 'fas fa-tablet-alt',
-      title: 'Espace Digital',
-      description: 'Zone dédiée avec liseuses et tablettes',
+      title: 'Ressources Digitales',
+      description: 'Accès aux e-books, cours en ligne et bases de données',
       image: digitalSection,
-      color: '#3a0ca3'
+      color: '#7209b7',
+      link: '/digital'
     },
     {
-      icon: 'fas fa-user-graduate',
-      title: 'Zones d\'Étude',
-      description: 'Espaces silencieux et salles de travail en groupe',
+      icon: 'fas fa-users',
+      title: 'Espaces Collaboratifs',
+      description: 'Zones de travail pour les projets de groupe par filière',
       image: studyZone,
-      color: '#7209b7'
+      color: '#f72585',
+      link: '/study-spaces'
     }
   ];
 
@@ -134,42 +148,92 @@ const Accueil = () => {
             <Link to="/catalogue" className="cta-button">
               <i className="fas fa-search"></i> Explorer la collection
             </Link>
-            <Link to="/visite" className="cta-button outline">
-              <i className="fas fa-video"></i> Visite virtuelle
+            <Link to="/reservation" className="cta-button outline">
+              <i className="fas fa-bookmark"></i> Réserver un livre
             </Link>
           </motion.div>
         </div>
       </motion.section>
 
-      {/* Features Section */}
-      <section className="features-section">
+      {/* Services Section */}
+      <section className="services-section">
         <div className="section-header">
-          <h2>Nos <span>Services</span></h2>
-          <p>Découvrez ce que nous offrons à notre communauté</p>
+          <h2>Nos <span>Services Étudiants</span></h2>
+          <p>Des solutions adaptées à vos besoins académiques</p>
         </div>
-        <div className="features-grid">
-          {features.map((feature, index) => (
+        
+        <div className="services-grid">
+          {services.map((service, index) => (
             <motion.div 
               key={index}
-              className="feature-card"
-              whileHover={{ y: -10 }}
+              className="service-card"
+              whileHover={{ y: -10, scale: 1.02 }}
               transition={{ duration: 0.3 }}
             >
-              <div className="feature-image" style={{ backgroundColor: feature.color }}>
-                <img src={feature.image} alt={feature.title} />
-              </div>
-              <div className="feature-content">
-                <div className="feature-icon" style={{ backgroundColor: feature.color }}>
-                  <i className={feature.icon}></i>
+              <div className="service-image" style={{ backgroundColor: service.color }}>
+                <img src={service.image} alt={service.title} />
+                <div className="service-badge">
+                  <i className={service.icon}></i>
                 </div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-                <Link to="/services" className="feature-link">
-                  En savoir plus <i className="fas fa-arrow-right"></i>
+              </div>
+              <div className="service-content">
+                <h3>{service.title}</h3>
+                <p>{service.description}</p>
+                <Link to={service.link} className="service-link">
+                  Découvrir <i className="fas fa-arrow-right"></i>
                 </Link>
+                
+                {service.title.includes('Spécialité') && (
+                  <div className="program-badge">
+                    <span>Disponible pour toutes les filières</span>
+                  </div>
+                )}
               </div>
             </motion.div>
           ))}
+        </div>
+
+        <div className="service-cta">
+          <p>Vous ne trouvez pas ce qu'il vous faut ?</p>
+          <Link to="/contact" className="cta-button outline">
+            <i className="fas fa-headset"></i> Contactez notre équipe
+          </Link>
+        </div>
+      </section>
+
+      {/* OFPPT Section */}
+      <section className="ofppt-section">
+        <div className="ofppt-container">
+          <div className="ofppt-content">
+            <h2>Centre <span>OFPPT</span> Taza</h2>
+            <p>Le Centre OFPPT de Taza offre des formations professionnelles de qualité dans divers domaines techniques, préparant les étudiants aux défis du marché du travail.</p>
+            <p>Notre bibliothèque soutient toutes les filières avec des ressources spécialisées.</p>
+            
+            <div className="ofppt-features">
+              <div className="ofppt-feature">
+                <i className="fas fa-graduation-cap"></i>
+                <div>
+                  <h3>Filières Supportées</h3>
+                  <p>TSDI, TCE, Mécanique, Électricité, et plus</p>
+                </div>
+              </div>
+              <div className="ofppt-feature">
+                <i className="fas fa-book"></i>
+                <div>
+                  <h3>Ressources Spécialisées</h3>
+                  <p>Manuels techniques et ressources par filière</p>
+                </div>
+              </div>
+            </div>
+            
+            <Link to="/programs" className="cta-button ofppt">
+              <i className="fas fa-list"></i> Voir toutes les filières
+            </Link>
+          </div>
+          
+          <div className="ofppt-image">
+            <img src={ofpptBuilding} alt="Centre OFPPT Taza" />
+          </div>
         </div>
       </section>
 
@@ -197,7 +261,7 @@ const Accueil = () => {
       <section className="featured-books">
         <div className="section-header">
           <h2>À Découvrir</h2>
-          <p>Nos sélections spéciales</p>
+          <p>Nos sélections spéciales pour étudiants</p>
         </div>
         <div className="books-grid">
           {featuredBooks.map((book, index) => (
@@ -225,11 +289,11 @@ const Accueil = () => {
       {/* CTA Section */}
       <section className="cta-section">
         <div className="cta-container">
-          <h2>Prêt à explorer notre collection ?</h2>
-          <p>Rejoignez notre communauté de lecteurs passionnés</p>
+          <h2>Prêt à commencer votre recherche ?</h2>
+          <p>Accédez à des milliers de ressources pour réussir votre formation</p>
           <div className="cta-buttons">
             <Link to="/catalogue" className="cta-button large">
-              <i className="fas fa-book-open"></i> Parcourir les livres
+              <i className="fas fa-book-open"></i> Explorer le catalogue
             </Link>
             {!user && (
               <Link to="/inscription" className="cta-button outline large">

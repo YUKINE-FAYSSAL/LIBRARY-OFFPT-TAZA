@@ -1,62 +1,22 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { getBooks } from '../services/bookService';
-import { AuthContext } from './AuthContext';
+// src/context/BookContext.jsx
+import React, { createContext, useState, useContext } from 'react';
 
-export const BookContext = createContext();
+const BookContext = createContext();
 
 export const BookProvider = ({ children }) => {
-  const [books, setBooks] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const { user } = useContext(AuthContext);
+  const [books, setBooks] = useState([
+    // Your initial book data here
+  ]);
 
-  const fetchBooks = async () => {
-    try {
-      const data = await getBooks();
-      setBooks(data);
-      if (user) {
-        const userFavorites = data.filter(book => 
-          user.favorites?.includes(book.id)
-        );
-        setFavorites(userFavorites);
-      }
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+  const addBook = (newBook) => {
+    setBooks(prev => [...prev, { ...newBook, id: Date.now() }]);
   };
-
-  const toggleFavorite = async (bookId) => {
-    try {
-      // Here you would typically make an API call to update favorites
-      const updatedBooks = books.map(book => 
-        book.id === bookId 
-          ? { ...book, isFavorite: !book.isFavorite } 
-          : book
-      );
-      setBooks(updatedBooks);
-      setFavorites(updatedBooks.filter(book => book.isFavorite));
-    } catch (err) {
-      console.error('Error updating favorite:', err);
-    }
-  };
-
-  useEffect(() => {
-    fetchBooks();
-  }, [user]);
 
   return (
-    <BookContext.Provider value={{ 
-      books, 
-      favorites,
-      loading, 
-      error, 
-      refreshBooks: fetchBooks,
-      toggleFavorite
-    }}>
+    <BookContext.Provider value={{ books, addBook }}>
       {children}
     </BookContext.Provider>
   );
 };
+
+export const useBookContext = () => useContext(BookContext);

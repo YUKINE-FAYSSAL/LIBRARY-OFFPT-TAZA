@@ -1,18 +1,16 @@
-import React from 'react';
+import axios from 'axios';
 
-const Navbar = () => {
-  return (
-    <nav className="sticky top-0 bg-gray-900 text-white shadow-md z-50">
-      <div className="max-w-7xl mx-auto px-4 flex justify-between items-center py-4">
-        <h1 className="text-2xl font-bold">Library Management</h1>
-        <ul className="flex space-x-4">
-          <li><a href="/catalogue" className="hover:text-blue-400">Catalogue</a></li>
-          <li><a href="/loans" className="hover:text-blue-400">Loans</a></li>
-          <li><a href="/profile" className="hover:text-blue-400">Profile</a></li>
-        </ul>
-      </div>
-    </nav>
-  );
-};
+const api = axios.create({
+    baseURL: 'http://localhost:8000/api', // Laravel API URL
+    withCredentials: true, // Required for Sanctum
+});
 
-export default Navbar;
+// Add CSRF token for Sanctum
+api.interceptors.request.use(async (config) => {
+    if (localStorage.getItem('token')) {
+        config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+    }
+    return config;
+});
+
+export default api;

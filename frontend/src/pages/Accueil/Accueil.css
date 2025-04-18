@@ -4,6 +4,8 @@
   --primary-dark: #3a0ca3;
   --secondary: #7209b7;
   --accent: #f72585;
+  --ofppt-blue: #0056b3;
+  --ofppt-light: #e6f0ff;
   --dark: #1b263b;
   --light: #f8f9fa;
   --gray: #adb5bd;
@@ -18,6 +20,7 @@
   color: var(--dark);
   line-height: 1.6;
   overflow-x: hidden;
+  background-color: #f9fafc;
 }
 
 /* Floating Navigation */
@@ -28,11 +31,12 @@
   transform: translateX(-50%);
   display: flex;
   gap: 1rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   padding: 0.8rem 1.5rem;
   border-radius: 50px;
   box-shadow: var(--shadow);
   z-index: 100;
+  backdrop-filter: blur(5px);
 }
 
 .nav-btn {
@@ -53,7 +57,7 @@
 }
 
 .nav-btn:hover {
-  color: var(--primary);
+  color: var(--ofppt-blue);
   transform: translateY(-5px);
 }
 
@@ -106,6 +110,7 @@
   font-weight: 700;
   margin-bottom: 1.5rem;
   line-height: 1.2;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.3);
 }
 
 .hero-content h1 span {
@@ -117,6 +122,7 @@
   max-width: 700px;
   margin: 0 auto 3rem;
   opacity: 0.9;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 
 .hero-buttons {
@@ -169,6 +175,15 @@
   font-size: 1.1rem;
 }
 
+.cta-button.ofppt {
+  background: var(--ofppt-blue);
+  border-color: var(--ofppt-blue);
+}
+
+.cta-button.ofppt:hover {
+  background: #004494;
+}
+
 /* Section Header */
 .section-header {
   text-align: center;
@@ -176,11 +191,26 @@
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
 }
 
 .section-header h2 {
   font-size: 2.8rem;
   margin-bottom: 1rem;
+  position: relative;
+  display: inline-block;
+}
+
+.section-header h2:after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
 }
 
 .section-header h2 span {
@@ -192,75 +222,77 @@
   color: var(--gray);
 }
 
-/* Features Section */
-.features-section {
+/* Services Section */
+.services-section {
   padding: 8rem 2rem;
   background: white;
+  position: relative;
 }
 
-.features-grid {
+.services-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2.5rem;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.feature-card {
+.service-card {
   background: white;
-  border-radius: 20px;
+  border-radius: 15px;
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: var(--transition);
+  position: relative;
 }
 
-.feature-image {
-  height: 250px;
+.service-image {
+  height: 200px;
   overflow: hidden;
+  position: relative;
 }
 
-.feature-image img {
+.service-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: var(--transition);
 }
 
-.feature-card:hover .feature-image img {
-  transform: scale(1.1);
-}
-
-.feature-content {
-  padding: 2rem;
-  position: relative;
-}
-
-.feature-icon {
-  width: 60px;
-  height: 60px;
+.service-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 50px;
+  height: 50px;
+  background: white;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  color: white;
-  position: absolute;
-  top: -30px;
-  left: 2rem;
+  color: var(--primary);
   box-shadow: var(--shadow);
 }
 
-.feature-content h3 {
-  font-size: 1.5rem;
-  margin: 1.5rem 0 1rem;
+.service-content {
+  padding: 1.5rem;
+  position: relative;
 }
 
-.feature-content p {
+.service-content h3 {
+  font-size: 1.4rem;
+  margin-bottom: 0.8rem;
+  color: var(--dark);
+}
+
+.service-content p {
   color: var(--gray);
   margin-bottom: 1.5rem;
+  font-size: 1rem;
 }
 
-.feature-link {
+.service-link {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -270,9 +302,111 @@
   transition: var(--transition);
 }
 
-.feature-link:hover {
+.service-link:hover {
   color: var(--primary-dark);
   gap: 1rem;
+}
+
+.program-badge {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background: var(--ofppt-light);
+  border-radius: 5px;
+  text-align: center;
+}
+
+.program-badge span {
+  font-size: 0.9rem;
+  color: var(--ofppt-blue);
+  font-weight: 500;
+}
+
+.service-cta {
+  text-align: center;
+  margin-top: 4rem;
+}
+
+.service-cta p {
+  font-size: 1.2rem;
+  color: var(--gray);
+  margin-bottom: 1.5rem;
+}
+
+/* OFPPT Section */
+.ofppt-section {
+  padding: 8rem 2rem;
+  background: var(--ofppt-light);
+  position: relative;
+}
+
+.ofppt-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.ofppt-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--ofppt-blue);
+}
+
+.ofppt-content h2 span {
+  color: var(--primary);
+}
+
+.ofppt-content p {
+  margin-bottom: 1.5rem;
+  color: var(--dark);
+  font-size: 1.1rem;
+  line-height: 1.8;
+}
+
+.ofppt-features {
+  margin-top: 2rem;
+}
+
+.ofppt-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.ofppt-feature i {
+  color: var(--ofppt-blue);
+  font-size: 1.5rem;
+  margin-top: 0.3rem;
+}
+
+.ofppt-feature h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.ofppt-feature p {
+  margin-bottom: 0;
+  font-size: 1rem;
+}
+
+.ofppt-image {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.ofppt-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: var(--transition);
+}
+
+.ofppt-image:hover img {
+  transform: scale(1.03);
 }
 
 /* Stats Section */
@@ -280,6 +414,20 @@
   padding: 6rem 2rem;
   background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-section:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255,255,255,0.05)" d="M0,0 L100,0 L100,100 L0,100 Z"></path></svg>');
+  background-size: cover;
+  opacity: 0.1;
 }
 
 .stats-container {
@@ -288,6 +436,7 @@
   gap: 2rem;
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
 }
 
 .stat-card {
@@ -297,6 +446,7 @@
   padding: 2.5rem 2rem;
   text-align: center;
   border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: var(--transition);
 }
 
 .stat-icon {
@@ -335,6 +485,7 @@
   border-radius: 15px;
   overflow: hidden;
   box-shadow: var(--shadow);
+  transition: var(--transition);
 }
 
 .book-image {
@@ -388,11 +539,13 @@
   background: var(--dark);
   color: white;
   text-align: center;
+  position: relative;
 }
 
 .cta-container {
   max-width: 800px;
   margin: 0 auto;
+  position: relative;
 }
 
 .cta-section h2 {
@@ -482,6 +635,17 @@
   .section-header h2 {
     font-size: 2.2rem;
   }
+
+  .ofppt-container {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .ofppt-image {
+    order: -1;
+    max-width: 600px;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 768px) {
@@ -497,11 +661,11 @@
     font-size: 1.2rem;
   }
   
-  .features-grid, .books-grid {
+  .services-grid, .books-grid {
     grid-template-columns: 1fr;
   }
   
-  .feature-card, .book-card {
+  .service-card, .book-card {
     max-width: 400px;
     margin: 0 auto;
   }
@@ -537,5 +701,9 @@
   
   .nav-btn span {
     display: none;
+  }
+
+  .ofppt-content h2 {
+    font-size: 2rem;
   }
 }
