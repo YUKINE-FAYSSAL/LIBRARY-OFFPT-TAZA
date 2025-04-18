@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Besoins;
 use App\Http\Controllers\EmprunteurController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -30,3 +31,6 @@ Route::post('/logout', [EmprunteurController::class, 'logout']);           // D�
 
 // Vérification d'e-mail
 Route::get('/verify-email/{token}', [EmprunteurController::class, 'verifyEmail']); // Vérification email
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

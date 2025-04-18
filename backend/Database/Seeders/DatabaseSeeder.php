@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         // Appel des Seeders
         //$this->call(BesoinSeeder::class);
-        $this->call(EmprunteurSeeder::class);
+        $this->call(EmprunteurSeeder::class,StagiaireSeeder::class,);
         //$this->call(FiliereSeeder::class);
         //$this->call(InventaireOuvrageSeeder::class); // Appel du InventaireOuvrageSeeder
        //$this->call(PretSeeder::class); // Appel du PretSeeder
